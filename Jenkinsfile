@@ -1,9 +1,9 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven 3.8.5' // Ensure this matches your Jenkins Maven installation name
-        jdk 'Java 17'       // Ensure this matches your Jenkins JDK installation name
+    environment {
+        JAVA_HOME = '/opt/homebrew/opt/openjdk@17'  // Update this path as needed
+        PATH = "${env.JAVA_HOME}/bin:/opt/homebrew/bin:${env.PATH}"
     }
 
     stages {
@@ -15,6 +15,8 @@ pipeline {
 
         stage('Build') {
             steps {
+                sh 'mvn -v'
+                sh 'java -version'
                 sh 'mvn clean compile'
             }
         }
@@ -33,10 +35,10 @@ pipeline {
 
     post {
         success {
-            echo 'Build and tests succeeded.'
+            echo '✅ Build and tests succeeded.'
         }
         failure {
-            echo 'Build or tests failed.'
+            echo '❌ Build or tests failed.'
         }
     }
 }
